@@ -1,21 +1,24 @@
-const express = require('express')
-const app = express()
+const express = require('express');
+const data = express();
 
-app.get('/', (req, res) => {
-  console.log('user hit the resource')
-  res.status(200).send('Home Page')
+data.get('/',(req,res)=>{
+    res.end(`<h1>Home Page</h1>`)
+})
+data.get('/about',(req,res)=>{
+    res.write(`
+              <h1> this is about page <h1>
+              <a href = '/'> home </a>
+              `)
+    res.status(200).end()
+})
+data.all('*',(req,res)=>{
+    res.status(400).end("resource not available")
 })
 
-app.get('/about', (req, res) => {
-  res.status(200).send('About Page')
-})
 
-app.all('*', (req, res) => {
-  res.status(404).send('<h1>resource not found</h1>')
-})
 
-app.listen(5000, () => {
-  console.log('server is listening on port 5000...')
+data.listen(3000,()=>{
+  console.log("app is running in port no. : 3000");
 })
 
 // app.get
