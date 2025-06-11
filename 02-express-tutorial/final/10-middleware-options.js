@@ -1,28 +1,40 @@
-const express = require('express')
+const express = require('express');
 const app = express()
-const morgan = require('morgan')
 const logger = require('./logger')
-const authorize = require('./authorize')
-//  req => middleware => res
+const author = require('./auth')
+const morgan = require('morgan')
 
-// app.use([logger, authorize])
-// app.use(express.static('./public'))
-app.use(morgan('tiny'))
+// order matters,where it is from there logger id added (node executes code sequentially)
+// app.use(logger)//to every rout
 
-app.get('/', (req, res) => {
-  res.send('Home')
+// 3 types of middleware - user defined , express , third party 
+// app.use(express.static('../public))
+app.use('/api',[logger,author]) // rout starts with or begins with ' /api '
+app.use('/api/about',morgan('tiny'))
+app.get('/',logger,(req,res)=>{
+  res.send('Home Page');
+  
 })
-app.get('/about', (req, res) => {
-  res.send('About')
+app.get('/about',(req,res)=>{
+  // console.log(req.users)
+  res.send('about Page');
 })
-app.get('/api/products', (req, res) => {
-  res.send('Products')
-})
-app.get('/api/items', (req, res) => {
-  console.log(req.user)
-  res.send('Items')
+app.get('/products',(req,res)=>{
+  res.send('products Page');  
 })
 
-app.listen(5000, () => {
-  console.log('Server is listening on port 5000....')
+app.get('/api/about',(req,res)=>{
+  console.log(req.users)//you can add this after send()
+  res.send( `about Page ${req.users.name}`);
+ 
+  
+})
+app.get('/api/products',(req,res)=>{
+  res.send('products Page');  
+})
+
+
+app.listen(3000,()=>{
+  
+  console.log('app is listening on port : 3000')
 })

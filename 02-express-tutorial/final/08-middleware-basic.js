@@ -2,7 +2,7 @@ const express = require('express')
 const app = express()
 
 //  req => middleware => res
-
+//place it inside a module and import it
 const logger = (req, res, next) => {
   const method = req.method
   const url = req.url
